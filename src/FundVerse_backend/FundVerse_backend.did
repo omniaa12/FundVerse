@@ -1,0 +1,60 @@
+type CampaignCard = record {
+  id : nat64;
+  title : text;
+  goal : nat64;
+  end_date : nat64;
+  idea_id : nat64;
+  category : text;
+  days_left : nat64;
+  amount_raised : nat64;
+};
+type CampaignStatus = variant { Ended; Active };
+type CampaignWithIdea = record { campaign : CampaignCard; idea : Idea };
+type CampaignMeta = record {
+  campaign_id : nat64;
+  goal : nat64;
+  amount_raised : nat64;
+  end_date_secs : nat64;
+};
+type Idea = record {
+  business_registration : nat8;
+  status : opt text;
+  title : text;
+  updated_at : nat64;
+  current_funding : nat64;
+  description : text;
+  created_at : nat64;
+  legal_entity : text;
+  funding_goal : nat64;
+  contact_info : text;
+  category : text;
+};
+type Result = variant { Ok : nat64; Err : text };
+service : () -> {
+  // Create a Campaign linked to an existing Idea. Returns new campaign_id (Ok) or error (Err).
+  create_campaign : (nat64, nat64, nat64) -> (Result);
+  // Create an Idea and persist it in stable storage. Returns the new idea_id.
+  create_idea : (text, text, nat64, text, text, text, nat8) -> (nat64);
+  // Return all campaign cards (title/category pulled from linked Idea).
+  get_campaign_cards : () -> (vec CampaignCard) query;
+  // Return cards filtered by status (Active/Ended).
+  get_campaign_cards_by_status : (CampaignStatus) -> (vec CampaignCard) query;
+  // Fetch a single campaign joined with its Idea.
+  get_campaign_with_idea : (nat64) -> (opt CampaignWithIdea) query;
+  // Convenience: fetch an idea by id
+  get_idea_by_id : (nat64) -> (opt Idea) query;
+  
+  // Fund_Flow Integration Methods
+  get_campaign_meta : (nat64) -> (opt CampaignMeta) query;
+  receive_icp_contribution : (nat64, nat64) -> (variant { Ok; Err : text });
+  receive_payout : (nat64, nat64) -> (variant { Ok; Err : text });
+  get_icp_contribution : (nat64) -> (nat64) query;
+  get_campaign_total_funding : (nat64) -> (nat64) query;
+  
+  // Document management
+  upload_doc : (nat64, text, text, vec nat8, nat64) -> (opt nat64);
+  get_doc : (nat64) -> (opt record { id : nat64; idea_id : nat64; name : text; content_type : text; data : vec nat8; uploaded_at : nat64; }) query;
+  
+  // Simple hello (handy for quick health checks)
+  greet : (text) -> (text) query;
+}

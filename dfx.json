@@ -1,0 +1,50 @@
+{
+  "canisters": {
+    "FundVerse_backend": {
+      "candid": "src/FundVerse_backend/FundVerse_backend.did",
+      "package": "FundVerse_backend",
+      "type": "rust"
+    },
+  "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "type": "custom",
+      "specified_id": "rdmx6-jaaaa-aaaaa-aaadq-cai",
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    },
+    "Fund_Flow": {
+      "candid": "src/Fund_Flow/Fund_Flow.did",
+      "package": "Fund_Flow",
+      "type": "rust",
+      "main": "src/Fund_Flow/src/lib.rs"
+    },
+    "Admin": {
+      "type": "rust",
+      "package": "Admin",
+      "candid": "src/Admin/Admin.did"
+    },
+   "FundVerse_frontend": {
+  "dependencies": [
+    "FundVerse_backend",
+    "Fund_Flow"
+  ],
+  "source": [
+    "src/FundVerse_frontend/dist"
+  ],
+  "type": "assets" , 
+  "workspace": "FundVerse_frontend"
+}
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

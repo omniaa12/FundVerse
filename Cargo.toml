@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "src/FundVerse_backend",
+    "src/Fund_Flow",
+    "src/Admin"
+]
+resolver = "2"
